@@ -11,6 +11,11 @@ MLJBase = "a7f614a8-145f-11e9-1d2a-a57a1082229d"
 ScientificTypes = "321657f4-b219-11e9-178b-2701a2544e81"
 
 [compat]
+DataFrames  = "0.19"
+JLBoost  = "^0.1.2"
+LossFunctions  = "0.5"
+MLJBase  = "0.8"
+ScientificTypes  = "0.2"
 julia = "1"
 
 [extras]
