@@ -1,0 +1,31 @@
+# MLJJLBoost
+
+```julia
+using RDatasets
+iris = dataset("datasets", "iris")
+iris[!, :is_setosa] .= iris.Species .== "setosa"
+
+using MLJ, MLJBase, MLJJLBoost
+X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa))
+
+using MLJJLBoost:JLBoostClassifier
+model = JLBoostClassifier()
+```
+
+Fit the model
+```julia
+mljmodel = fit(model, 1, X, y)
+```
+
+Predicting using the model
+
+```julia
+predict(model, mljmodel.fitresult, X)
+```
+
+#### Feature Importances
+One can obtain the feature importance using the `feature_importance` function
+
+```julia
+feature_importance(mljmodel.fitresult, X, y)
+```
