@@ -1,4 +1,9 @@
-# MLJJLBoost
+# MLJJLBoost.jl
+
+The [MLJ.jl](https://github.com/alan-turing-institute/MLJ.jl) interface to [JLBoost.jl](https://github.com/xiaodaigh/JLBoost.jl) a hackable implementation of Gradient Boosting Regression Trees.
+
+
+## Usage Example
 
 ````julia
 using RDatasets
@@ -22,7 +27,7 @@ JLBoostClassifier(loss = JLBoost.LogitLogLoss(),
                   min_child_weight = 1,
                   lambda = 0,
                   gamma = 0,
-                  colsample_bytree = 1,) @ 1…06
+                  colsample_bytree = 1,) @ 1…48
 ````
 
 
