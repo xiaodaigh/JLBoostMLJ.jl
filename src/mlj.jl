@@ -8,7 +8,7 @@ import MLJBase: input_scitype, target_scitype, docstring
 using ScientificTypes: Continuous, OrderedFactor, Count, Multiclass, Finite
 
 using LossFunctions: PoissonLoss, L2DistLoss
-using JLBoost: LogitLogLoss, jlboost, AUC, gini
+using JLBoost: LogitLogLoss, jlboost, AUC, gini, feature_importance
 
 using DataFrames: DataFrame, nrow, levels
 
@@ -167,24 +167,21 @@ fit(model::JLBoostClassifier, verbosity::Int, X, y::AbstractVector) = begin
      )
 
      if length(levels(y[:, 1])) == 2
-         println("meh")
          res = (
             fitresult = fitresult,
             cache = nothing,
             report = (
-                AUC2 = abs(AUC(predict(fitresult, X), y[:, 1]))#,
-                # feature_importance2 = feature_importance(fitresult, df)
+                AUC = abs(AUC(predict(fitresult, X), y[:, 1])),
+                feature_importance = feature_importance(fitresult, df)
             )
         )
-        println("got here")
         return res
     else
          return (
             fitresult = fitresult,
             cache = nothing,
             report = (
-                placeholder = true
-                # feature_importance3 = feature_importance(fitresult, df)
+                feature_importance = feature_importance(fitresult, df),
             )
         )
     end
