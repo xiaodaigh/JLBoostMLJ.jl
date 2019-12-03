@@ -3,14 +3,14 @@ export fit, predict, fitted_params, JLBoostMLJModel, JLBoostClassifier, JLBoostR
 #using MLJBase
 import MLJBase: Probabilistic, Deterministic, clean!, fit, predict, fitted_params, load_path, Table
 import MLJBase: package_name, package_uuid, package_url, is_pure_julia, package_license
-import MLJBase: input_scitype, target_scitype, docstring
+import MLJBase: input_scitype, target_scitype, docstring, UnivariateFinite
 
 using ScientificTypes: Continuous, OrderedFactor, Count, Multiclass, Finite
 
 using LossFunctions: PoissonLoss, L2DistLoss
 using JLBoost: LogitLogLoss, jlboost, AUC, gini, feature_importance
 
-using DataFrames: DataFrame, nrow, levels
+using DataFrames: DataFrame, nrow, levels, categorical
 
 # supervised determinstinistic model
 #abstract type JLBoostMLJModel <: Supervised end
@@ -153,26 +153,29 @@ fit(model::Union{JLBoostRegressor, JLBoostCount}, verbosity::Int, X, y::Abstract
 end
 
 fit(model::JLBoostClassifier, verbosity::Int, X, y::AbstractVector) = begin
-    y = DataFrame(__y__ = y)
-    df = hcat(X, y)
+    ydf = DataFrame(__y__ = y)
+    df = hcat(X, ydf)
 
-    target = names(y)[1]
-    features = setdiff(names(X), names(y))
+    target = names(ydf)[1]
+    features = setdiff(names(X), names(ydf))
     warm_start = fill(0.0, nrow(X))
-    fitresult = jlboost(df, target, features, warm_start , model.loss;
+    treemodel = jlboost(df, target, features, warm_start , model.loss;
         nrounds = model.nrounds, subsample = model.subsample, eta = model.eta,
         colsample_bytree = model.colsample_bytree, max_depth = model.max_depth,
         min_child_weight = model.min_child_weight, lambda = model.lambda,
         gamma = model.gamma, verbose = verbosity >= 1
      )
 
-     if length(levels(y[:, 1])) == 2
+     # TODO if the loss is some categorical related then should do this as well
+     fitresult = (treemodel = treemodel, target_levels = levels(y))
+
+     if length(levels(y)) == 2
          res = (
             fitresult = fitresult,
             cache = nothing,
             report = (
-                AUC = abs(AUC(predict(fitresult, X), y[:, 1])),
-                feature_importance = feature_importance(fitresult, df)
+                AUC = abs(AUC(predict(fitresult.treemodel, X), y)),
+                feature_importance = feature_importance(fitresult.treemodel, df)
             )
         )
         return res
@@ -181,7 +184,7 @@ fit(model::JLBoostClassifier, verbosity::Int, X, y::AbstractVector) = begin
             fitresult = fitresult,
             cache = nothing,
             report = (
-                feature_importance = feature_importance(fitresult, df),
+                feature_importance = feature_importance(fitresult.treemodel, df),
             )
         )
     end
@@ -190,7 +193,16 @@ end
 # see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-fitted_params-method-1
 fitted_params(model::JLBoostMLJModel, fitresult) = (fitresult = fitresult, trees = trees(fitresult))
 
+
 #  seehttps://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-predict-method-1
+predict(model::JLBoostClassifier, fitresult, Xnew) = begin
+    res = predict(fitresult.treemodel, Xnew)
+    p = 1 ./ (1 .+ exp.(-res))
+    levels_cate = categorical(fitresult.target_levels)
+    [UnivariateFinite(levels_cate, [p, 1-p]) for p in p]
+end
+
+
 predict(model::JLBoostMLJModel, fitresult, Xnew) = begin
     predict(fitresult, Xnew)
 end
