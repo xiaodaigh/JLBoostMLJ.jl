@@ -67,12 +67,12 @@ Return an MLJ.jl compatible Model. The parameters are the same as `jlboost`. See
 JLBoostClassifier(;
     loss = LogitLogLoss(),
     nrounds = 1,
-    subsample = 1,
-    eta = 1,
+    subsample = 1.0,
+    eta = 1.0,
     max_depth = 6,
-    min_child_weight = 1,
-    lambda = 0,
-    gamma = 0,
+    min_child_weight = 1.0,
+    lambda = 0.0,
+    gamma = 0.0,
     colsample_bytree = 1) = JLBoostClassifier(loss, nrounds, subsample, eta, max_depth, min_child_weight, lambda, gamma, colsample_bytree)
 
 """
@@ -92,12 +92,12 @@ Return an MLJ.jl compatible Model. The parameters are the same as `jlboost`. See
 JLBoostRegressor(;
     loss = L2DistLoss(),
     nrounds = 1,
-    subsample = 1,
-    eta = 1,
+    subsample = 1.0,
+    eta = 1.0,
     max_depth = 6,
-    min_child_weight = 1,
-    lambda = 0,
-    gamma = 0,
+    min_child_weight = 1.0,
+    lambda = 0.0,
+    gamma = 0.0,
     colsample_bytree = 1) = JLBoostRegressor(loss, nrounds, subsample, eta, max_depth, min_child_weight, lambda, gamma, colsample_bytree)
 
 """
@@ -117,12 +117,12 @@ Return an MLJ.jl compatible Model. The parameters are the same as `jlboost`. See
 JLBoostCount(;
     loss = PoissonLoss(),
     nrounds = 1,
-    subsample = 1,
-    eta = 1,
+    subsample = 1.0,
+    eta = 1.0,
     max_depth = 6,
-    min_child_weight = 1,
-    lambda = 0,
-    gamma = 0,
+    min_child_weight = 1.0,
+    lambda = 0.0,
+    gamma = 0.0,
     colsample_bytree = 1) = JLBoostCount(loss, nrounds, subsample, eta, max_depth, min_child_weight, lambda, gamma, colsample_bytree)
 
 const JLBoostMLJModel = Union{JLBoostClassifier, JLBoostRegressor, JLBoostCount}
@@ -166,7 +166,6 @@ fit(model::JLBoostClassifier, verbosity::Int, X, y::AbstractVector) = begin
         gamma = model.gamma, verbose = verbosity >= 1
      )
 
-     # TODO if the loss is some categorical related then should do this as well
      fitresult = (treemodel = treemodel, target_levels = levels(y))
 
      if length(levels(y)) == 2
@@ -191,7 +190,7 @@ fit(model::JLBoostClassifier, verbosity::Int, X, y::AbstractVector) = begin
 end
 
 # see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-fitted_params-method-1
-fitted_params(model::JLBoostMLJModel, fitresult) = (fitresult = fitresult, trees = trees(fitresult))
+fitted_params(model::JLBoostMLJModel, fitresult) = (fitresult = fitresult.treemodel, trees = trees(fitresult.treemodel))
 
 
 #  seehttps://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-predict-method-1
@@ -210,7 +209,7 @@ end
 # see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#Trait-declarations-1
 input_scitype(::Type{<:JLBoostMLJModel}) = Table(Union{Continuous, OrderedFactor, Count})
 
-target_scitype(::Type{<:JLBoostClassifier}) = AbstractVector{<:Finite{2}} #AbstractVector{<:Multiclass{2}}
+target_scitype(::Type{<:JLBoostClassifier}) = AbstractVector{<:Union{Finite{2}, Continuous, Count}} #AbstractVector{<:Multiclass{2}}
 target_scitype(::Type{<:JLBoostRegressor}) = AbstractVector{<:Continuous}
 target_scitype(::Type{<:JLBoostCount}) = AbstractVector{<:Count}
 
