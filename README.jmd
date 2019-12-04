@@ -17,20 +17,47 @@ using MLJJLBoost:JLBoostClassifier
 model = JLBoostClassifier()
 ```
 
+### Simple Fitting
+
 Fit the model
 ```julia
 mljmodel = fit(model, 1, X, y)
 ```
-
 Predicting using the model
 
 ```julia
 predict(model, mljmodel.fitresult, X)
 ```
 
-#### Feature Importances
+Feature Importance for simple fitting
 One can obtain the feature importance using the `feature_importance` function
 
 ```julia
-feature_importance(mljmodel.fitresult, X, y)
+feature_importance(mljmodel.fitresult.treemodel, X, y)
+```
+
+### Using MLJ machines
+
+Put the model and data in a machine
+
+```julia
+mljmachine  = machine(model, X, y)
+```
+
+Fit model using machine
+
+```julia
+fit!(mljmachine)
+```
+
+Predict using machine
+
+```julia
+predict(mljmachine, X)
+```
+
+Feature importance using machine
+
+```julia
+feature_importance(fitted_params(mljmachine).fitresult, X, y)
 ```

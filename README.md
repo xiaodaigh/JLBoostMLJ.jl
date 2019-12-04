@@ -21,18 +21,20 @@ model = JLBoostClassifier()
 ````
 JLBoostClassifier(loss = JLBoost.LogitLogLoss(),
                   nrounds = 1,
-                  subsample = 1,
-                  eta = 1,
+                  subsample = 1.0,
+                  eta = 1.0,
                   max_depth = 6,
-                  min_child_weight = 1,
-                  lambda = 0,
-                  gamma = 0,
-                  colsample_bytree = 1,) @ 1…48
+                  min_child_weight = 1.0,
+                  lambda = 0.0,
+                  gamma = 0.0,
+                  colsample_bytree = 1,) @ 1…09
 ````
 
 
 
 
+
+### Simple Fitting
 
 Fit the model
 ````julia
@@ -55,20 +57,23 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-meh
-got here
-(fitresult = JLBoost.JLBoostTrees.JLBoostTreeModel(JLBoost.JLBoostTrees.JLB
-oostTree[
+(fitresult = (treemodel = JLBoost.JLBoostTrees.JLBoostTreeModel(JLBoost.JLB
+oostTrees.JLBoostTree[
    -- PetalLength <= 1.9
      ---- weight = 2.0
 
    -- PetalLength > 1.9
      ---- weight = -2.0
 ], JLBoost.LogitLogLoss(), :__y__),
+              target_levels = Bool[0, 1],),
  cache = nothing,
- report = 0.16666666666666669,)
+ report = (AUC = 0.16666666666666669,
+           feature_importance = 1×4 DataFrame
+│ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
+│     │ Symbol      │ Float64      │ Float64  │ Float64   │
+├─────┼─────────────┼──────────────┼──────────┼───────────┤
+│ 1   │ PetalLength │ 1.0          │ 1.0      │ 1.0       │,),)
 ````
-
 
 
 
@@ -81,38 +86,138 @@ predict(model, mljmodel.fitresult, X)
 
 
 ````
-150-element Array{Float64,1}:
-  2.0
-  2.0
-  2.0
-  2.0
-  2.0
-  2.0
-  2.0
-  2.0
-  2.0
-  2.0
-  ⋮  
- -2.0
- -2.0
- -2.0
- -2.0
- -2.0
- -2.0
- -2.0
- -2.0
- -2.0
+150-element Array{UnivariateFinite{Bool,UInt32,Float64},1}:
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ ⋮                                          
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
 ````
 
 
 
 
 
-#### Feature Importances
+Feature Importance for simple fitting
 One can obtain the feature importance using the `feature_importance` function
 
 ````julia
-feature_importance(mljmodel.fitresult, X, y)
+feature_importance(mljmodel.fitresult.treemodel, X, y)
+````
+
+
+````
+1×4 DataFrame
+│ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
+│     │ Symbol      │ Float64      │ Float64  │ Float64   │
+├─────┼─────────────┼──────────────┼──────────┼───────────┤
+│ 1   │ PetalLength │ 1.0          │ 1.0      │ 1.0       │
+````
+
+
+
+
+
+### Using MLJ machines
+
+Put the model and data in a machine
+
+````julia
+mljmachine  = machine(model, X, y)
+````
+
+
+````
+Machine{JLBoostClassifier} @ 8…76
+````
+
+
+
+
+
+Fit model using machine
+
+````julia
+fit!(mljmachine)
+````
+
+
+````
+Choosing a split on SepalLength
+Choosing a split on SepalWidth
+Choosing a split on PetalLength
+Choosing a split on PetalWidth
+(feature = :PetalLength, split_at = 1.9, cutpt = 50, gain = 133.33333333333
+334, lweight = 2.0, rweight = -2.0)
+Choosing a split on SepalLength
+Choosing a split on SepalWidth
+Choosing a split on PetalLength
+Choosing a split on PetalWidth
+Choosing a split on SepalLength
+Choosing a split on SepalWidth
+Choosing a split on PetalLength
+Choosing a split on PetalWidth
+Machine{JLBoostClassifier} @ 8…76
+````
+
+
+
+
+
+Predict using machine
+
+````julia
+predict(mljmachine, X)
+````
+
+
+````
+150-element Array{UnivariateFinite{Bool,UInt32,Float64},1}:
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ UnivariateFinite(false=>0.881, true=>0.119)
+ ⋮                                          
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite(false=>0.119, true=>0.881)
+````
+
+
+
+
+
+Feature importance using machine
+
+````julia
+feature_importance(fitted_params(mljmachine).fitresult, X, y)
 ````
 
 
