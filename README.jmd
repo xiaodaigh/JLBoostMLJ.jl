@@ -1,39 +1,20 @@
 # MLJJLBoost.jl
 
-The [MLJ.jl](https://github.com/alan-turing-institute/MLJ.jl) interface to [JLBoost.jl](https://github.com/xiaodaigh/JLBoost.jl) a hackable implementation of Gradient Boosting Regression Trees.
+The [MLJ.jl](https://github.com/alan-turing-institute/MLJ.jl) interface to [JLBoost.jl](https://github.com/xiaodaigh/JLBoost.jl), a hackable implementation of Gradient Boosting Regression Trees.
 
 
 ## Usage Example
 
 ```julia
-using RDatasets
-iris = dataset("datasets", "iris")
-iris[!, :is_setosa] .= iris.Species .== "setosa"
+using RDatasets;
+iris = dataset("datasets", "iris");
+iris[!, :is_setosa] .= iris.Species .== "setosa";
 
-using MLJ, MLJBase, MLJJLBoost
-X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa))
+using MLJ, MLJBase, MLJJLBoost;
+X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa));
 
-using MLJJLBoost:JLBoostClassifier
+using MLJJLBoost:JLBoostClassifier;
 model = JLBoostClassifier()
-```
-
-### Simple Fitting
-
-Fit the model
-```julia
-mljmodel = fit(model, 1, X, y)
-```
-Predicting using the model
-
-```julia
-predict(model, mljmodel.fitresult, X)
-```
-
-Feature Importance for simple fitting
-One can obtain the feature importance using the `feature_importance` function
-
-```julia
-feature_importance(mljmodel.fitresult.treemodel, X, y)
 ```
 
 ### Using MLJ machines
@@ -60,4 +41,60 @@ Feature importance using machine
 
 ```julia
 feature_importance(fitted_params(mljmachine).fitresult, X, y)
+```
+
+#### Hyperparameter tuning
+
+Data preparation: need to convert `y` to categorical
+
+```julia
+using CategoricalArrays
+y_cate = categorical(y)
+```
+
+Set up some hyperparameter ranges
+
+```julia
+using JLBoost, MLJJLBoost, MLJ
+jlb = JLBoostClassifier()
+r1 = range(jlb, :nrounds, lower=1, upper = 6)
+r2 = range(jlb, :max_depth, lower=1, upper = 6)
+r3 = range(jlb, :eta, lower=0.1, upper=1.0)
+```
+
+Set up the machine
+```julia
+tm = TunedModel(model = jlb, ranges = [r1, r2, r3], measure = cross_entropy)
+m = machine(tm, X, y_cate)
+```
+
+Fit it!
+```julia
+fit!(m)
+```
+
+Inspected the tuned parameters
+```julia
+fitted_params(m).best_model.max_depth
+fitted_params(m).best_model.nrounds
+fitted_params(m).best_model.eta
+```
+
+### Simple Fitting
+
+Fit the model with `verbosity = 1`
+```julia
+mljmodel = fit(model, 1, X, y)
+```
+Predicting using the model
+
+```julia
+predict(model, mljmodel.fitresult, X)
+```
+
+Feature Importance for simple fitting
+One can obtain the feature importance using the `feature_importance` function
+
+```julia
+feature_importance(mljmodel.fitresult.treemodel, X, y)
 ```
