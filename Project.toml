@@ -1,7 +1,7 @@
 name = "MLJJLBoost"
 uuid = "cb937e20-20f2-4cea-8a28-54eef8bab285"
 authors = ["Dai ZJ <zhuojia.dai@gmail.com>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
@@ -11,7 +11,7 @@ MLJBase = "a7f614a8-145f-11e9-1d2a-a57a1082229d"
 ScientificTypes = "321657f4-b219-11e9-178b-2701a2544e81"
 
 [compat]
-DataFrames = "0.19"
+DataFrames = "0.19, 0.20"
 JLBoost = "^0.1.3"
 LossFunctions = "0.5"
 MLJBase = "0.8"
