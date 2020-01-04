@@ -214,14 +214,14 @@ target_scitype(::Type{<:JLBoostRegressor}) = AbstractVector{<:Continuous}
 target_scitype(::Type{<:JLBoostCount}) = AbstractVector{<:Count}
 
 # Misc see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/
-load_path(::Type{JLBoostClassifier}) = "MLJJLBoost.JLBoostClassifier"
-load_path(::Type{<:JLBoostRegressor}) = "MLJJLBoost.JLBoostRegressor"
-load_path(::Type{<:JLBoostCount}) = "MLJJLBoost.JLBoostCount"
+load_path(::Type{JLBoostClassifier}) = "JLBoostMLJ.JLBoostClassifier"
+load_path(::Type{<:JLBoostRegressor}) = "JLBoostMLJ.JLBoostRegressor"
+load_path(::Type{<:JLBoostCount}) = "JLBoostMLJ.JLBoostCount"
 
 
-package_name(::Type{<:JLBoostMLJModel}) = "MLJJLBoost"
+package_name(::Type{<:JLBoostMLJModel}) = "JLBoostMLJ"
 package_uuid(::Type{<:JLBoostMLJModel}) = "cb937e20-20f2-4cea-8a28-54eef8bab285"
-package_url(::Type{<:JLBoostMLJModel}) = "https://github.com/xiaodaigh/MLJJLBoost.jl"
+package_url(::Type{<:JLBoostMLJModel}) = "https://github.com/xiaodaigh/JLBoostMLJ.jl"
 is_pure_julia(::Type{<:JLBoostMLJModel}) = true
 package_license(::Type{<:JLBoostMLJModel}) = "MIT"
 

@@ -1,4 +1,4 @@
-# MLJJLBoost.jl
+# JLBoostMLJ.jl
 
 The [MLJ.jl](https://github.com/alan-turing-institute/MLJ.jl) interface to [JLBoost.jl](https://github.com/xiaodaigh/JLBoost.jl), a hackable implementation of Gradient Boosting Regression Trees.
 
@@ -10,10 +10,10 @@ using RDatasets;
 iris = dataset("datasets", "iris");
 iris[!, :is_setosa] .= iris.Species .== "setosa";
 
-using MLJ, MLJBase, MLJJLBoost;
+using MLJ, JLBoostMLJ;
 X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa));
 
-using MLJJLBoost:JLBoostClassifier;
+using JLBoostMLJ:JLBoostClassifier;
 model = JLBoostClassifier()
 ```
 
@@ -55,7 +55,7 @@ y_cate = categorical(y)
 Set up some hyperparameter ranges
 
 ```julia
-using JLBoost, MLJJLBoost, MLJ
+using JLBoost, JLBoostMLJ, MLJ
 jlb = JLBoostClassifier()
 r1 = range(jlb, :nrounds, lower=1, upper = 6)
 r2 = range(jlb, :max_depth, lower=1, upper = 6)

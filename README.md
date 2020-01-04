@@ -1,4 +1,4 @@
-# MLJJLBoost.jl
+# JLBoostMLJ.jl
 
 The [MLJ.jl](https://github.com/alan-turing-institute/MLJ.jl) interface to [JLBoost.jl](https://github.com/xiaodaigh/JLBoost.jl), a hackable implementation of Gradient Boosting Regression Trees.
 
@@ -10,16 +10,16 @@ using RDatasets;
 iris = dataset("datasets", "iris");
 iris[!, :is_setosa] .= iris.Species .== "setosa";
 
-using MLJ, MLJBase, MLJJLBoost;
+using MLJ, JLBoostMLJ;
 X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa));
 
-using MLJJLBoost:JLBoostClassifier;
+using JLBoostMLJ:JLBoostClassifier;
 model = JLBoostClassifier()
 ````
 
 
 ````
-JLBoostClassifier(loss = LogitLogLoss(),
+JLBoostClassifier(loss = JLBoost.LogitLogLoss(),
                   nrounds = 1,
                   subsample = 1.0,
                   eta = 1.0,
@@ -27,7 +27,7 @@ JLBoostClassifier(loss = LogitLogLoss(),
                   min_child_weight = 1.0,
                   lambda = 0.0,
                   gamma = 0.0,
-                  colsample_bytree = 1,) @ 1…39
+                  colsample_bytree = 1,) @ 1…35
 ````
 
 
@@ -44,7 +44,7 @@ mljmachine  = machine(model, X, y)
 
 
 ````
-Machine{JLBoostClassifier} @ 6…34
+Machine{JLBoostClassifier} @ 1…68
 ````
 
 
@@ -73,7 +73,7 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-Machine{JLBoostClassifier} @ 6…34
+Machine{JLBoostClassifier} @ 1…68
 ````
 
 
@@ -175,7 +175,7 @@ y_cate = categorical(y)
 Set up some hyperparameter ranges
 
 ````julia
-using JLBoost, MLJJLBoost, MLJ
+using JLBoost, JLBoostMLJ, MLJ
 jlb = JLBoostClassifier()
 r1 = range(jlb, :nrounds, lower=1, upper = 6)
 r2 = range(jlb, :max_depth, lower=1, upper = 6)
@@ -187,7 +187,7 @@ r3 = range(jlb, :eta, lower=0.1, upper=1.0)
 MLJ.NumericRange(field = :eta,
                  lower = 0.1,
                  upper = 1.0,
-                 scale = :linear,) @ 1…87
+                 scale = :linear,) @ 3…78
 ````
 
 
@@ -202,7 +202,7 @@ m = machine(tm, X, y_cate)
 
 
 ````
-Machine{ProbabilisticTunedModel} @ 8…36
+Machine{ProbabilisticTunedModel} @ 9…31
 ````
 
 
@@ -216,7 +216,7 @@ fit!(m)
 
 
 ````
-Machine{ProbabilisticTunedModel} @ 8…36
+Machine{ProbabilisticTunedModel} @ 9…31
 ````
 
 
@@ -262,15 +262,15 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-(fitresult = (treemodel = JLBoostTreeModel(JLBoost.JLBoostTrees.AbstractJLB
-oostTree[eta = 1.0 (tree weight)
+(fitresult = (treemodel = JLBoost.JLBoostTrees.JLBoostTreeModel(JLBoost.JLB
+oostTrees.AbstractJLBoostTree[eta = 1.0 (tree weight)
 
    -- PetalLength <= 1.9
      ---- weight = 2.0
 
    -- PetalLength > 1.9
      ---- weight = -2.0
-], LogitLogLoss(), :__y__),
+], JLBoost.LogitLogLoss(), :__y__),
               target_levels = Bool[0, 1],),
  cache = nothing,
  report = (AUC = 0.16666666666666669,
