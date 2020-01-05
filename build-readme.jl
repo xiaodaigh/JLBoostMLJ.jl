@@ -1,11 +1,11 @@
 # Weave readme
 using Pkg
-Pkg.activate("c:/git/JLBoostmlj")
+Pkg.activate("c:/git/JLBoostMLJ")
 using Weave
 
-weave("c:/git/JLBoostmlj/README.jmd", out_path="c:/git/JLBoostmlj", doctype="github")
+weave("c:/git/JLBoostMLJ/README.jmd", out_path="c:/git/JLBoostMLJ", doctype="github")
 
 
 if false
-tangle("c:/git/JLBoostmlj/README.jmd")
+tangle("c:/git/JLBoostMLJ/README.jmd")
 end
