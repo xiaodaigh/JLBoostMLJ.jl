@@ -5,7 +5,7 @@ using Weave
 
 weave("c:/git/JLBoostmlj/README.jmd", out_path="c:/git/JLBoostmlj", doctype="github")
 
+
 if false
-
-
+tangle("c:/git/JLBoostmlj/README.jmd")
 end
