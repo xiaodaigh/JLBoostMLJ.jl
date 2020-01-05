@@ -27,7 +27,7 @@ JLBoostmlj.JLBoostClassifier(loss = JLBoost.LogitLogLoss(),
                              min_child_weight = 1.0,
                              lambda = 0.0,
                              gamma = 0.0,
-                             colsample_bytree = 1,) @ 6…28
+                             colsample_bytree = 1,) @ 9…85
 ````
 
 
@@ -44,7 +44,7 @@ mljmachine  = machine(model, X, y)
 
 
 ````
-Machine{JLBoostClassifier} @ 1…30
+Machine{JLBoostClassifier} @ 4…63
 ````
 
 
@@ -73,7 +73,7 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-Machine{JLBoostClassifier} @ 1…30
+Machine{JLBoostClassifier} @ 4…63
 ````
 
 
@@ -202,7 +202,7 @@ m = machine(tm, X, y_cate)
 
 
 ````
-Machine{ProbabilisticTunedModel} @ 1…80
+Machine{ProbabilisticTunedModel} @ 7…47
 ````
 
 
@@ -216,7 +216,7 @@ fit!(m)
 
 
 ````
-Machine{ProbabilisticTunedModel} @ 1…80
+Machine{ProbabilisticTunedModel} @ 7…47
 ````
 
 
