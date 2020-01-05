@@ -1,4 +1,4 @@
-# JLBoostmlj.jl
+# JLBoostMLJ.jl
 
 The [MLJ.jl](https://github.com/alan-turing-institute/MLJ.jl) interface to [JLBoost.jl](https://github.com/xiaodaigh/JLBoost.jl), a hackable implementation of Gradient Boosting Regression Trees.
 
@@ -10,16 +10,16 @@ using RDatasets;
 iris = dataset("datasets", "iris");
 iris[!, :is_setosa] .= iris.Species .== "setosa";
 
-using MLJ, JLBoostmlj;
+using MLJ, JLBoostMLJ;
 X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa));
 
-using JLBoostmlj:JLBoostClassifier;
+using JLBoostMLJ:JLBoostClassifier;
 model = JLBoostClassifier()
 ````
 
 
 ````
-JLBoostClassifier(loss = LogitLogLoss(),
+JLBoostClassifier(loss = JLBoost.LogitLogLoss(),
                   nrounds = 1,
                   subsample = 1.0,
                   eta = 1.0,
@@ -27,7 +27,7 @@ JLBoostClassifier(loss = LogitLogLoss(),
                   min_child_weight = 1.0,
                   lambda = 0.0,
                   gamma = 0.0,
-                  colsample_bytree = 1,) @ 7…79
+                  colsample_bytree = 1,) @ 6…52
 ````
 
 
@@ -44,7 +44,7 @@ mljmachine  = machine(model, X, y)
 
 
 ````
-Machine{JLBoostClassifier} @ 1…53
+Machine{JLBoostClassifier} @ 1…93
 ````
 
 
@@ -73,7 +73,7 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-Machine{JLBoostClassifier} @ 1…53
+Machine{JLBoostClassifier} @ 1…93
 ````
 
 
@@ -88,7 +88,7 @@ predict(mljmachine, X)
 
 
 ````
-150-element Array{UnivariateFinite{Bool,UInt32,Float64},1}:
+150-element Array{MLJBase.UnivariateFinite{Bool,UInt32,Float64},1}:
  UnivariateFinite(false=>0.881, true=>0.119)
  UnivariateFinite(false=>0.881, true=>0.119)
  UnivariateFinite(false=>0.881, true=>0.119)
@@ -123,7 +123,7 @@ feature_importance(fitted_params(mljmachine).fitresult, X, y)
 
 
 ````
-1×4 DataFrame
+1×4 DataFrames.DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤
@@ -145,7 +145,7 @@ y_cate = categorical(y)
 
 
 ````
-150-element CategoricalArray{Bool,1,UInt32}:
+150-element CategoricalArrays.CategoricalArray{Bool,1,UInt32}:
  true 
  true 
  true 
@@ -175,7 +175,7 @@ y_cate = categorical(y)
 Set up some hyperparameter ranges
 
 ````julia
-using JLBoost, JLBoostmlj, MLJ
+using JLBoost, JLBoostMLJ, MLJ
 jlb = JLBoostClassifier()
 r1 = range(jlb, :nrounds, lower=1, upper = 6)
 r2 = range(jlb, :max_depth, lower=1, upper = 6)
@@ -187,7 +187,7 @@ r3 = range(jlb, :eta, lower=0.1, upper=1.0)
 MLJ.NumericRange(field = :eta,
                  lower = 0.1,
                  upper = 1.0,
-                 scale = :linear,) @ 5…42
+                 scale = :linear,) @ 1…03
 ````
 
 
@@ -202,7 +202,7 @@ m = machine(tm, X, y_cate)
 
 
 ````
-Machine{ProbabilisticTunedModel} @ 1…73
+Machine{ProbabilisticTunedModel} @ 5…78
 ````
 
 
@@ -216,7 +216,7 @@ fit!(m)
 
 
 ````
-Machine{ProbabilisticTunedModel} @ 1…73
+Machine{ProbabilisticTunedModel} @ 5…78
 ````
 
 
@@ -262,19 +262,19 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-(fitresult = (treemodel = JLBoostTreeModel(AbstractJLBoostTree[eta = 1.0 (t
-ree weight)
+(fitresult = (treemodel = JLBoost.JLBoostTrees.JLBoostTreeModel(JLBoost.JLB
+oostTrees.AbstractJLBoostTree[eta = 1.0 (tree weight)
 
    -- PetalLength <= 1.9
      ---- weight = 2.0
 
    -- PetalLength > 1.9
      ---- weight = -2.0
-], LogitLogLoss(), :__y__),
+], JLBoost.LogitLogLoss(), :__y__),
               target_levels = Bool[0, 1],),
  cache = nothing,
  report = (AUC = 0.16666666666666669,
-           feature_importance = 1×4 DataFrame
+           feature_importance = 1×4 DataFrames.DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤
@@ -292,7 +292,7 @@ predict(model, mljmodel.fitresult, X)
 
 
 ````
-150-element Array{UnivariateFinite{Bool,UInt32,Float64},1}:
+150-element Array{MLJBase.UnivariateFinite{Bool,UInt32,Float64},1}:
  UnivariateFinite(false=>0.881, true=>0.119)
  UnivariateFinite(false=>0.881, true=>0.119)
  UnivariateFinite(false=>0.881, true=>0.119)
@@ -328,7 +328,7 @@ feature_importance(mljmodel.fitresult.treemodel, X, y)
 
 
 ````
-1×4 DataFrame
+1×4 DataFrames.DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤

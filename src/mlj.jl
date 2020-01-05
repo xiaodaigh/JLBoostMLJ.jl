@@ -1,4 +1,4 @@
-export fit, predict, fitted_params, JLBoostmljModel, JLBoostClassifier, JLBoostRegressor, JLBoostCount
+export fit, predict, fitted_params, JLBoostMLJModel, JLBoostClassifier, JLBoostRegressor, JLBoostCount
 
 #using MLJBase
 import MLJBase: Probabilistic, Deterministic, clean!, fit, predict, fitted_params, load_path, Table
@@ -13,7 +13,7 @@ using JLBoost: LogitLogLoss, jlboost, AUC, gini, feature_importance
 using DataFrames: DataFrame, nrow, levels, categorical
 
 # supervised determinstinistic model
-#abstract type JLBoostmljModel <: Supervised end
+#abstract type JLBoostMLJModel <: Supervised end
 
 mutable struct JLBoostClassifier <: Probabilistic
     loss
@@ -125,7 +125,7 @@ JLBoostCount(;
     gamma = 0.0,
     colsample_bytree = 1) = JLBoostCount(loss, nrounds, subsample, eta, max_depth, min_child_weight, lambda, gamma, colsample_bytree)
 
-const JLBoostmljModel = Union{JLBoostClassifier, JLBoostRegressor, JLBoostCount}
+const JLBoostMLJModel = Union{JLBoostClassifier, JLBoostRegressor, JLBoostCount}
 
 # see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-fit-method-1
 fit(model::Union{JLBoostRegressor, JLBoostCount}, verbosity::Int, X, y::AbstractVector) = begin
@@ -190,7 +190,7 @@ fit(model::JLBoostClassifier, verbosity::Int, X, y::AbstractVector) = begin
 end
 
 # see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-fitted_params-method-1
-fitted_params(model::JLBoostmljModel, fitresult) = (fitresult = fitresult.treemodel, trees = trees(fitresult.treemodel))
+fitted_params(model::JLBoostMLJModel, fitresult) = (fitresult = fitresult.treemodel, trees = trees(fitresult.treemodel))
 
 
 #  seehttps://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-predict-method-1
@@ -202,28 +202,28 @@ predict(model::JLBoostClassifier, fitresult, Xnew) = begin
 end
 
 
-predict(model::JLBoostmljModel, fitresult, Xnew) = begin
+predict(model::JLBoostMLJModel, fitresult, Xnew) = begin
     predict(fitresult, Xnew)
 end
 
 # see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#Trait-declarations-1
-input_scitype(::Type{<:JLBoostmljModel}) = Table(Union{Continuous, OrderedFactor, Count})
+input_scitype(::Type{<:JLBoostMLJModel}) = Table(Union{Continuous, OrderedFactor, Count})
 
 target_scitype(::Type{<:JLBoostClassifier}) = AbstractVector{<:Union{Finite{2}, Continuous, Count}} #AbstractVector{<:Multiclass{2}}
 target_scitype(::Type{<:JLBoostRegressor}) = AbstractVector{<:Continuous}
 target_scitype(::Type{<:JLBoostCount}) = AbstractVector{<:Count}
 
 # Misc see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/
-load_path(::Type{JLBoostClassifier}) = "JLBoostmlj.JLBoostClassifier"
-load_path(::Type{<:JLBoostRegressor}) = "JLBoostmlj.JLBoostRegressor"
-load_path(::Type{<:JLBoostCount}) = "JLBoostmlj.JLBoostCount"
+load_path(::Type{JLBoostClassifier}) = "JLBoostMLJ.JLBoostClassifier"
+load_path(::Type{<:JLBoostRegressor}) = "JLBoostMLJ.JLBoostRegressor"
+load_path(::Type{<:JLBoostCount}) = "JLBoostMLJ.JLBoostCount"
 
 
-package_name(::Type{<:JLBoostmljModel}) = "JLBoostmlj"
-package_uuid(::Type{<:JLBoostmljModel}) = "cb937e20-20f2-4cea-8a28-54eef8bab285"
-package_url(::Type{<:JLBoostmljModel}) = "https://github.com/xiaodaigh/JLBoostmlj.jl"
-is_pure_julia(::Type{<:JLBoostmljModel}) = true
-package_license(::Type{<:JLBoostmljModel}) = "MIT"
+package_name(::Type{<:JLBoostMLJModel}) = "JLBoostMLJ"
+package_uuid(::Type{<:JLBoostMLJModel}) = "cb937e20-20f2-4cea-8a28-54eef8bab285"
+package_url(::Type{<:JLBoostMLJModel}) = "https://github.com/xiaodaigh/JLBoostMLJ.jl"
+is_pure_julia(::Type{<:JLBoostMLJModel}) = true
+package_license(::Type{<:JLBoostMLJModel}) = "MIT"
 
 docstring(::Type{JLBoostClassifier}) =
     "The JLBoost gradient boosting method, for use with "*

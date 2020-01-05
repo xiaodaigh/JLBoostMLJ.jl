@@ -3,10 +3,10 @@ using RDatasets;
 iris = dataset("datasets", "iris");
 iris[!, :is_setosa] .= iris.Species .== "setosa";
 
-using MLJ, JLBoostmlj;
+using MLJ, JLBoostMLJ;
 X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa));
 
-using JLBoostmlj:JLBoostClassifier;
+using JLBoostMLJ:JLBoostClassifier;
 model = JLBoostClassifier()
 
 
@@ -26,7 +26,7 @@ using CategoricalArrays
 y_cate = categorical(y)
 
 
-using JLBoost, JLBoostmlj, MLJ
+using JLBoost, JLBoostMLJ, MLJ
 jlb = JLBoostClassifier()
 r1 = range(jlb, :nrounds, lower=1, upper = 6)
 r2 = range(jlb, :max_depth, lower=1, upper = 6)
