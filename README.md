@@ -1,4 +1,4 @@
-# JLBoostmlj.jl
+# JLBoostMLJ.jl
 
 The [MLJ.jl](https://github.com/alan-turing-institute/MLJ.jl) interface to [JLBoost.jl](https://github.com/xiaodaigh/JLBoost.jl), a hackable implementation of Gradient Boosting Regression Trees.
 
