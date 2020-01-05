@@ -1,4 +1,4 @@
-module JLBoostMLJ
+module JLBoostmlj
 
 using JLBoost
 

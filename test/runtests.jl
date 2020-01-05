@@ -1,6 +1,6 @@
-using JLBoostMLJ
+using JLBoostmlj
 using Test
 
-@testset "JLBoostMLJ.jl" begin
+@testset "JLBoostmlj.jl" begin
     # Write your own tests here.
 end
