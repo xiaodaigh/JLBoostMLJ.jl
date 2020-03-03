@@ -17,7 +17,7 @@ JLBoost = "^0.1.4"
 LossFunctions = "0.5"
 MLJ = "0.6"
 MLJBase = "0.9"
-ScientificTypes = "0.3"
+ScientificTypes = "0.3, 0.7"
 julia = "1"
 
 [extras]
