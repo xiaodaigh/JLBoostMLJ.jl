@@ -8,7 +8,7 @@ import MLJBase: input_scitype, target_scitype, docstring, UnivariateFinite
 using ScientificTypes: Continuous, OrderedFactor, Count, Multiclass, Finite
 
 using LossFunctions: PoissonLoss, L2DistLoss
-using JLBoost: LogitLogLoss, jlboost, AUC, gini, feature_importance
+using JLBoost: LogitLogLoss, jlboost, AUC, gini, feature_importance, predict
 
 using DataFrames: DataFrame, nrow, levels, categorical
 
@@ -173,7 +173,7 @@ fit(model::JLBoostClassifier, verbosity::Int, X, y::AbstractVector) = begin
             fitresult = fitresult,
             cache = nothing,
             report = (
-                AUC = abs(AUC(predict(fitresult.treemodel, X), y)),
+                AUC = abs(AUC(JLBoost.predict(fitresult.treemodel, X), y)),
                 feature_importance = feature_importance(fitresult.treemodel, df)
             )
         )
@@ -195,7 +195,7 @@ fitted_params(model::JLBoostMLJModel, fitresult) = (fitresult = fitresult.treemo
 
 #  seehttps://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-predict-method-1
 predict(model::JLBoostClassifier, fitresult, Xnew) = begin
-    res = predict(fitresult.treemodel, Xnew)
+    res = JLBoost.predict(fitresult.treemodel, Xnew)
     p = 1 ./ (1 .+ exp.(-res))
     levels_cate = categorical(fitresult.target_levels)
     [UnivariateFinite(levels_cate, [p, 1-p]) for p in p]
@@ -203,7 +203,7 @@ end
 
 
 predict(model::JLBoostMLJModel, fitresult, Xnew) = begin
-    predict(fitresult, Xnew)
+    JLBoost.predict(fitresult, Xnew)
 end
 
 # see https://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#Trait-declarations-1
