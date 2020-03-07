@@ -1,4 +1,3 @@
-
 using RDatasets;
 iris = dataset("datasets", "iris");
 iris[!, :is_setosa] .= iris.Species .== "setosa";
@@ -52,4 +51,3 @@ predict(model, mljmodel.fitresult, X)
 
 
 feature_importance(mljmodel.fitresult.treemodel, X, y)
-

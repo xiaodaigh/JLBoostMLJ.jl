@@ -19,15 +19,16 @@ model = JLBoostClassifier()
 
 
 ````
-JLBoostClassifier(loss = JLBoost.LogitLogLoss(),
-                  nrounds = 1,
-                  subsample = 1.0,
-                  eta = 1.0,
-                  max_depth = 6,
-                  min_child_weight = 1.0,
-                  lambda = 0.0,
-                  gamma = 0.0,
-                  colsample_bytree = 1,) @ 6…52
+JLBoostClassifier(
+    loss = JLBoost.LogitLogLoss(),
+    nrounds = 1,
+    subsample = 1.0,
+    eta = 1.0,
+    max_depth = 6,
+    min_child_weight = 1.0,
+    lambda = 0.0,
+    gamma = 0.0,
+    colsample_bytree = 1) @ 1…51
 ````
 
 
@@ -44,7 +45,7 @@ mljmachine  = machine(model, X, y)
 
 
 ````
-Machine{JLBoostClassifier} @ 1…93
+Machine{JLBoostClassifier} @ 3…89
 ````
 
 
@@ -73,7 +74,7 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-Machine{JLBoostClassifier} @ 1…93
+Machine{JLBoostClassifier} @ 3…89
 ````
 
 
@@ -139,7 +140,6 @@ feature_importance(fitted_params(mljmachine).fitresult, X, y)
 Data preparation: need to convert `y` to categorical
 
 ````julia
-using CategoricalArrays
 y_cate = categorical(y)
 ````
 
@@ -184,10 +184,13 @@ r3 = range(jlb, :eta, lower=0.1, upper=1.0)
 
 
 ````
-MLJ.NumericRange(field = :eta,
-                 lower = 0.1,
-                 upper = 1.0,
-                 scale = :linear,) @ 1…03
+NumericRange(
+    field = :eta,
+    lower = 0.1,
+    upper = 1.0,
+    origin = 0.55,
+    unit = 0.45,
+    scale = :linear) @ 1…28
 ````
 
 
@@ -202,7 +205,7 @@ m = machine(tm, X, y_cate)
 
 
 ````
-Machine{ProbabilisticTunedModel} @ 5…78
+Machine{ProbabilisticTunedModel} @ 1…91
 ````
 
 
@@ -216,7 +219,7 @@ fit!(m)
 
 
 ````
-Machine{ProbabilisticTunedModel} @ 5…78
+Machine{ProbabilisticTunedModel} @ 1…91
 ````
 
 
