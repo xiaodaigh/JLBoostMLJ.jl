@@ -48,7 +48,6 @@ feature_importance(fitted_params(mljmachine).fitresult, X, y)
 Data preparation: need to convert `y` to categorical
 
 ```julia
-using CategoricalArrays
 y_cate = categorical(y)
 ```
 
