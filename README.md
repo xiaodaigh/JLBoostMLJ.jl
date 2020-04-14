@@ -28,7 +28,7 @@ JLBoostClassifier(
     min_child_weight = 1.0,
     lambda = 0.0,
     gamma = 0.0,
-    colsample_bytree = 1) @ 4…85
+    colsample_bytree = 1) @ 6…66
 ````
 
 
@@ -45,7 +45,7 @@ mljmachine  = machine(model, X, y)
 
 
 ````
-Machine{JLBoostClassifier} @ 5…33
+Machine{JLBoostClassifier} @ 1…60
 ````
 
 
@@ -74,7 +74,7 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-Machine{JLBoostClassifier} @ 5…33
+Machine{JLBoostClassifier} @ 1…60
 ````
 
 
@@ -100,7 +100,7 @@ predict(mljmachine, X)
  UnivariateFinite(false=>0.881, true=>0.119)
  UnivariateFinite(false=>0.881, true=>0.119)
  UnivariateFinite(false=>0.881, true=>0.119)
- ⋮                                          
+ ⋮
  UnivariateFinite(false=>0.119, true=>0.881)
  UnivariateFinite(false=>0.119, true=>0.881)
  UnivariateFinite(false=>0.119, true=>0.881)
@@ -124,7 +124,7 @@ feature_importance(fitted_params(mljmachine).fitresult, X, y)
 
 
 ````
-1×4 DataFrames.DataFrame
+1×4 DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤
@@ -145,18 +145,18 @@ y_cate = categorical(y)
 
 
 ````
-150-element CategoricalArrays.CategoricalArray{Bool,1,UInt32}:
- true 
- true 
- true 
- true 
- true 
- true 
- true 
- true 
- true 
- true 
- ⋮    
+150-element CategoricalArray{Bool,1,UInt32}:
+ true
+ true
+ true
+ true
+ true
+ true
+ true
+ true
+ true
+ true
+ ⋮
  false
  false
  false
@@ -199,7 +199,7 @@ m = machine(tm, X, y_cate)
 
 
 ````
-Machine{ProbabilisticTunedModel{Grid,…}} @ 1…10
+Machine{ProbabilisticTunedModel{Grid,…}} @ 4…79
 ````
 
 
@@ -213,7 +213,7 @@ fit!(m)
 
 
 ````
-Machine{ProbabilisticTunedModel{Grid,…}} @ 1…10
+Machine{ProbabilisticTunedModel{Grid,…}} @ 4…79
 ````
 
 
@@ -271,7 +271,7 @@ oostTrees.AbstractJLBoostTree[eta = 1.0 (tree weight)
               target_levels = Bool[0, 1],),
  cache = nothing,
  report = (AUC = 0.16666666666666669,
-           feature_importance = 1×4 DataFrames.DataFrame
+           feature_importance = 1×4 DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤
@@ -300,7 +300,7 @@ predict(model, mljmodel.fitresult, X)
  UnivariateFinite(false=>0.881, true=>0.119)
  UnivariateFinite(false=>0.881, true=>0.119)
  UnivariateFinite(false=>0.881, true=>0.119)
- ⋮                                          
+ ⋮
  UnivariateFinite(false=>0.119, true=>0.881)
  UnivariateFinite(false=>0.119, true=>0.881)
  UnivariateFinite(false=>0.119, true=>0.881)
@@ -325,7 +325,7 @@ feature_importance(mljmodel.fitresult.treemodel, X, y)
 
 
 ````
-1×4 DataFrames.DataFrame
+1×4 DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤

@@ -1,3 +1,4 @@
+
 using RDatasets;
 iris = dataset("datasets", "iris");
 iris[!, :is_setosa] .= iris.Species .== "setosa";
@@ -21,7 +22,6 @@ predict(mljmachine, X)
 feature_importance(fitted_params(mljmachine).fitresult, X, y)
 
 
-using CategoricalArrays
 y_cate = categorical(y)
 
 
@@ -51,3 +51,4 @@ predict(model, mljmodel.fitresult, X)
 
 
 feature_importance(mljmodel.fitresult.treemodel, X, y)
+
