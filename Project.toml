@@ -16,7 +16,7 @@ DataFrames = "0.20"
 JLBoost = "^0.1.8"
 LossFunctions = "0.5, 0.6"
 MLJ = "0.10"
-MLJBase = "0.12"
+MLJBase = "0.12, 0.13"
 ScientificTypes = "0.7"
 julia = "1"
 
