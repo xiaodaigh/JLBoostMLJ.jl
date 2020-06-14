@@ -1,7 +1,7 @@
 
 using RDatasets;
 iris = dataset("datasets", "iris");
-iris[!, :is_setosa] .= iris.Species .== "setosa";
+iris[!, :is_setosa] = iris.Species .== "setosa";
 
 using MLJ, JLBoostMLJ;
 X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa));
