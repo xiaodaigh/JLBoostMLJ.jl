@@ -8,7 +8,7 @@ The [MLJ.jl](https://github.com/alan-turing-institute/MLJ.jl) interface to [JLBo
 ````julia
 using RDatasets;
 iris = dataset("datasets", "iris");
-iris[!, :is_setosa] .= iris.Species .== "setosa";
+iris[!, :is_setosa] = iris.Species .== "setosa";
 
 using MLJ, JLBoostMLJ;
 X, y = unpack(iris, x->!(x in [:is_setosa, :Species]), ==(:is_setosa));
@@ -20,7 +20,7 @@ model = JLBoostClassifier()
 
 ````
 JLBoostClassifier(
-    loss = JLBoost.LogitLogLoss(),
+    loss = LogitLogLoss(),
     nrounds = 1,
     subsample = 1.0,
     eta = 1.0,
@@ -28,7 +28,7 @@ JLBoostClassifier(
     min_child_weight = 1.0,
     lambda = 0.0,
     gamma = 0.0,
-    colsample_bytree = 1) @ 9…70
+    colsample_bytree = 1) @ 1…36
 ````
 
 
@@ -45,7 +45,7 @@ mljmachine  = machine(model, X, y)
 
 
 ````
-Machine{JLBoostClassifier} @ 6…93
+Machine{JLBoostClassifier} @ 5…37
 ````
 
 
@@ -74,7 +74,7 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-Machine{JLBoostClassifier} @ 6…93
+Machine{JLBoostClassifier} @ 5…37
 ````
 
 
@@ -89,27 +89,28 @@ predict(mljmachine, X)
 
 
 ````
-150-element Array{MLJBase.UnivariateFinite{Bool,UInt32,Float64},1}:
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
+150-element Array{MLJBase.UnivariateFinite{ScientificTypes.Multiclass{2},Bo
+ol,UInt32,Float64},1}:
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
  ⋮
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
 ````
 
 
@@ -199,7 +200,7 @@ m = machine(tm, X, y_cate)
 
 
 ````
-Machine{ProbabilisticTunedModel{Grid,…}} @ 3…78
+Machine{ProbabilisticTunedModel{Grid,…}} @ 6…55
 ````
 
 
@@ -213,7 +214,7 @@ fit!(m)
 
 
 ````
-Machine{ProbabilisticTunedModel{Grid,…}} @ 3…78
+Machine{ProbabilisticTunedModel{Grid,…}} @ 6…55
 ````
 
 
@@ -229,7 +230,7 @@ fitted_params(m).best_model.eta
 
 
 ````
-0.1
+0.9
 ````
 
 
@@ -259,15 +260,15 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-(fitresult = (treemodel = JLBoost.JLBoostTrees.JLBoostTreeModel(JLBoost.JLB
-oostTrees.AbstractJLBoostTree[eta = 1.0 (tree weight)
+(fitresult = (treemodel = JLBoostTreeModel(AbstractJLBoostTree[eta = 1.0 (t
+ree weight)
 
    -- PetalLength <= 1.9
      ---- weight = 2.0
 
    -- PetalLength > 1.9
      ---- weight = -2.0
-], JLBoost.LogitLogLoss(), :__y__),
+], LogitLogLoss(), :__y__),
               target_levels = Bool[0, 1],),
  cache = nothing,
  report = (AUC = 0.16666666666666669,
@@ -289,27 +290,28 @@ predict(model, mljmodel.fitresult, X)
 
 
 ````
-150-element Array{MLJBase.UnivariateFinite{Bool,UInt32,Float64},1}:
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
- UnivariateFinite(false=>0.881, true=>0.119)
+150-element Array{MLJBase.UnivariateFinite{ScientificTypes.Multiclass{2},Bo
+ol,UInt32,Float64},1}:
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.881, true=>0.119)
  ⋮
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
- UnivariateFinite(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
+ UnivariateFinite{ScientificTypes.Multiclass{2}}(false=>0.119, true=>0.881)
 ````
 
 
