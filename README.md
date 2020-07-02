@@ -20,7 +20,7 @@ model = JLBoostClassifier()
 
 ````
 JLBoostClassifier(
-    loss = LogitLogLoss(),
+    loss = JLBoost.LogitLogLoss(),
     nrounds = 1,
     subsample = 1.0,
     eta = 1.0,
@@ -28,7 +28,7 @@ JLBoostClassifier(
     min_child_weight = 1.0,
     lambda = 0.0,
     gamma = 0.0,
-    colsample_bytree = 1) @ 1…36
+    colsample_bytree = 1) @130
 ````
 
 
@@ -45,7 +45,11 @@ mljmachine  = machine(model, X, y)
 
 
 ````
-Machine{JLBoostClassifier} @ 5…37
+Machine{JLBoostClassifier} @173 trained 0 times.
+  args: 
+    1:	Source @921 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
+ontinuous,1}}`
+    2:	Source @216 ⏎ `AbstractArray{ScientificTypes.Count,1}`
 ````
 
 
@@ -74,7 +78,11 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-Machine{JLBoostClassifier} @ 5…37
+Machine{JLBoostClassifier} @173 trained 1 time.
+  args: 
+    1:	Source @921 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
+ontinuous,1}}`
+    2:	Source @216 ⏎ `AbstractArray{ScientificTypes.Count,1}`
 ````
 
 
@@ -125,7 +133,7 @@ feature_importance(fitted_params(mljmachine).fitresult, X, y)
 
 
 ````
-1×4 DataFrames.DataFrame
+1×4 DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤
@@ -146,7 +154,7 @@ y_cate = categorical(y)
 
 
 ````
-150-element CategoricalArrays.CategoricalArray{Bool,1,UInt32}:
+150-element CategoricalArray{Bool,1,UInt32}:
  true
  true
  true
@@ -200,7 +208,11 @@ m = machine(tm, X, y_cate)
 
 
 ````
-Machine{ProbabilisticTunedModel{Grid,…}} @ 6…55
+Machine{ProbabilisticTunedModel{Grid,…}} @902 trained 0 times.
+  args: 
+    1:	Source @376 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
+ontinuous,1}}`
+    2:	Source @912 ⏎ `AbstractArray{ScientificTypes.Multiclass{2},1}`
 ````
 
 
@@ -214,7 +226,11 @@ fit!(m)
 
 
 ````
-Machine{ProbabilisticTunedModel{Grid,…}} @ 6…55
+Machine{ProbabilisticTunedModel{Grid,…}} @902 trained 1 time.
+  args: 
+    1:	Source @376 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
+ontinuous,1}}`
+    2:	Source @912 ⏎ `AbstractArray{ScientificTypes.Multiclass{2},1}`
 ````
 
 
@@ -260,19 +276,19 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-(fitresult = (treemodel = JLBoostTreeModel(AbstractJLBoostTree[eta = 1.0 (t
-ree weight)
+(fitresult = (treemodel = JLBoost.JLBoostTrees.JLBoostTreeModel(JLBoost.JLB
+oostTrees.AbstractJLBoostTree[eta = 1.0 (tree weight)
 
    -- PetalLength <= 1.9
      ---- weight = 2.0
 
    -- PetalLength > 1.9
      ---- weight = -2.0
-], LogitLogLoss(), :__y__),
+], JLBoost.LogitLogLoss(), :__y__),
               target_levels = Bool[0, 1],),
  cache = nothing,
  report = (AUC = 0.16666666666666669,
-           feature_importance = 1×4 DataFrames.DataFrame
+           feature_importance = 1×4 DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤
@@ -327,7 +343,7 @@ feature_importance(mljmodel.fitresult.treemodel, X, y)
 
 
 ````
-1×4 DataFrames.DataFrame
+1×4 DataFrame
 │ Row │ feature     │ Quality_Gain │ Coverage │ Frequency │
 │     │ Symbol      │ Float64      │ Float64  │ Float64   │
 ├─────┼─────────────┼──────────────┼──────────┼───────────┤

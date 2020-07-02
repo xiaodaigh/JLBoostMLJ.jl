@@ -1,7 +1,7 @@
 # Weave readme
 using Pkg
 cd("c:/git/JLBoostMLJ")
-Pkg.activate("c:/git/JLBoostMLJ")
+# Pkg.activate("c:/git/JLBoostMLJ")
 
 Pkg.add("RDatasets")
 Pkg.add("Weave")
