@@ -21,7 +21,7 @@ model = JLBoostClassifier()
 
 ````
 JLBoostClassifier(
-    loss = LogitLogLoss(),
+    loss = JLBoost.LogitLogLoss(),
     nrounds = 1,
     subsample = 1.0,
     eta = 1.0,
@@ -29,7 +29,7 @@ JLBoostClassifier(
     min_child_weight = 1.0,
     lambda = 0.0,
     gamma = 0.0,
-    colsample_bytree = 1) @810
+    colsample_bytree = 1) @087
 ````
 
 
@@ -47,11 +47,11 @@ mljmachine  = machine(model, X, y)
 
 
 ````
-Machine{JLBoostClassifier} @772 trained 0 times.
+Machine{JLBoostClassifier} @730 trained 0 times.
   args: 
-    1:	Source @097 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
+    1:	Source @910 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
 ontinuous,1}}`
-    2:	Source @077 ⏎ `AbstractArray{ScientificTypes.Count,1}`
+    2:	Source @954 ⏎ `AbstractArray{ScientificTypes.Count,1}`
 ````
 
 
@@ -81,11 +81,11 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-Machine{JLBoostClassifier} @772 trained 1 time.
+Machine{JLBoostClassifier} @730 trained 1 time.
   args: 
-    1:	Source @097 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
+    1:	Source @910 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
 ontinuous,1}}`
-    2:	Source @077 ⏎ `AbstractArray{ScientificTypes.Count,1}`
+    2:	Source @954 ⏎ `AbstractArray{ScientificTypes.Count,1}`
 ````
 
 
@@ -216,11 +216,11 @@ m = machine(tm, X, y_cate)
 
 
 ````
-Machine{ProbabilisticTunedModel{Grid,…}} @388 trained 0 times.
+Machine{ProbabilisticTunedModel{Grid,…}} @109 trained 0 times.
   args: 
-    1:	Source @578 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
+    1:	Source @664 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
 ontinuous,1}}`
-    2:	Source @226 ⏎ `AbstractArray{ScientificTypes.Multiclass{2},1}`
+    2:	Source @788 ⏎ `AbstractArray{ScientificTypes.Multiclass{2},1}`
 ````
 
 
@@ -235,11 +235,11 @@ fit!(m)
 
 
 ````
-Machine{ProbabilisticTunedModel{Grid,…}} @388 trained 1 time.
+Machine{ProbabilisticTunedModel{Grid,…}} @109 trained 1 time.
   args: 
-    1:	Source @578 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
+    1:	Source @664 ⏎ `ScientificTypes.Table{AbstractArray{ScientificTypes.C
 ontinuous,1}}`
-    2:	Source @226 ⏎ `AbstractArray{ScientificTypes.Multiclass{2},1}`
+    2:	Source @788 ⏎ `AbstractArray{ScientificTypes.Multiclass{2},1}`
 ````
 
 
@@ -287,15 +287,15 @@ Choosing a split on SepalLength
 Choosing a split on SepalWidth
 Choosing a split on PetalLength
 Choosing a split on PetalWidth
-(fitresult = (treemodel = JLBoostTreeModel(AbstractJLBoostTree[eta = 1.0 (t
-ree weight)
+(fitresult = (treemodel = JLBoost.JLBoostTrees.JLBoostTreeModel(JLBoost.JLB
+oostTrees.AbstractJLBoostTree[eta = 1.0 (tree weight)
 
    -- PetalLength <= 1.9
      ---- weight = 2.0
 
    -- PetalLength > 1.9
      ---- weight = -2.0
-], LogitLogLoss(), :__y__),
+], JLBoost.LogitLogLoss(), :__y__),
               target_levels = Bool[0, 1],),
  cache = nothing,
  report = (AUC = 0.16666666666666669,

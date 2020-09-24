@@ -1,6 +1,6 @@
 export fit, predict, fitted_params, JLBoostMLJModel, JLBoostClassifier, JLBoostRegressor, JLBoostCount
 
-#using MLJBase
+import MLJBase
 import MLJBase: Probabilistic, Deterministic, clean!, fit, predict, fitted_params, load_path, Table
 import MLJBase: package_name, package_uuid, package_url, is_pure_julia, package_license
 import MLJBase: input_scitype, target_scitype, docstring, UnivariateFinite
@@ -8,7 +8,7 @@ import MLJBase: input_scitype, target_scitype, docstring, UnivariateFinite
 using ScientificTypes: Continuous, OrderedFactor, Count, Multiclass, Finite
 
 using LossFunctions: PoissonLoss, L2DistLoss
-using JLBoost: LogitLogLoss, jlboost, AUC, gini, feature_importance, predict
+using JLBoost: LogitLogLoss, jlboost, AUC, gini, feature_importance
 
 using DataFrames: DataFrame, nrow, levels, categorical
 
@@ -194,7 +194,7 @@ fitted_params(model::JLBoostMLJModel, fitresult) = (fitresult = fitresult.treemo
 
 
 #  seehttps://alan-turing-institute.github.io/MLJ.jl/stable/adding_models_for_general_use/#The-predict-method-1
-predict(model::JLBoostClassifier, fitresult, Xnew) = begin
+function MLJBase.predict(model::JLBoostClassifier, fitresult, Xnew)
     res = JLBoost.predict(fitresult.treemodel, Xnew)
     p = 1 ./ (1 .+ exp.(-res))
     levels_cate = categorical(fitresult.target_levels)
@@ -202,7 +202,7 @@ predict(model::JLBoostClassifier, fitresult, Xnew) = begin
 end
 
 
-predict(model::JLBoostMLJModel, fitresult, Xnew) = begin
+function MLJBase.predict(model::JLBoostMLJModel, fitresult, Xnew)
     JLBoost.predict(fitresult, Xnew)
 end
 
